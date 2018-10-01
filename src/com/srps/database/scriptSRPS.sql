@@ -1,5 +1,7 @@
 --uncomment the following line you want to test database (give privileges to this user )
 --CREATE USER SRPS IDENTIFIED BY hello123
+
+--Table for Department
 create table DEPT
 (
   DEPT_NAME VARCHAR2(20) not null
@@ -8,6 +10,7 @@ create table DEPT
 )
 /
 
+--Table for Teacher
 create table TEACHER
 (
   T_ID      NUMBER        not null
@@ -21,6 +24,7 @@ create table TEACHER
 )
 /
 
+--Table for Courses
 create table COURSES
 (
   C_ID     VARCHAR2(20) not null
@@ -33,6 +37,7 @@ create table COURSES
 )
 /
 
+-- Table for Student
 create table STUDENT
 (
   S_ID      NUMBER        not null
@@ -46,6 +51,7 @@ create table STUDENT
 )
 /
 
+-- Table for storing marks
 create table MARKS
 (
   M_SID     NUMBER       not null
@@ -59,7 +65,7 @@ create table MARKS
     references COURSES,
   MIDEXAM   FLOAT,
   FINALEXAM FLOAT,
-  QUIZ1     FLOAT        not null,
+  QUIZ1     FLOAT        not null, --The teacher must need to submit at least 1 quiz result while he's updating the marks
   QUIZ2     FLOAT,
   QUIZ3     FLOAT,
   QUIZ4     FLOAT,
