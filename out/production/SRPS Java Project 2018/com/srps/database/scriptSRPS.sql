@@ -1,3 +1,5 @@
+--uncomment the following line you want to test database (give privileges to this user )
+--CREATE USER SRPS IDENTIFIED BY hello123
 create table DEPT
 (
   DEPT_NAME VARCHAR2(20) not null
