@@ -7,7 +7,8 @@ import java.sql.*;
  *  The main purpose of this class is to streamline the database connectivity and query precessing for front end
  *  developers. Extensive uses of methods simplifies both connectivity, result retrieval and exception handling.
  *  Front end developers only have to deal with SQLException while processing 'ResultSet' type objects.
- *
+ *  Generally the methods that end with or has 'List' in them returns ResultSet type objects. Returns NULL in case of error.
+ *  Generally the methods that end with or has 'Count' in them returns int >= 0 or -1 in case of error
  *  @author MD. Fakhruddin Gazzali
  *  @version 1.0
  *  @since 2018-10-28
@@ -26,10 +27,10 @@ public class dbase {
     private int retint; // Private variable to return int type data by methods.
 
     /**
-     * * Constructor for dbase class objects. Creates connection with database.
-     * * By default 'username' will be selected as SRPS and 'password' as hello123 (case-sensitive).
-     * * @param _username String Username for the database account
-     * * @param _password String Password that is allocated to the user
+     * Constructor for dbase class objects. Creates connection with database.
+     * By default 'username' will be selected as SRPS and 'password' as hello123 (case-sensitive).
+     * @param _username String Username for the database account
+     * @param _password String Password that is allocated to the user
      */
 
     public dbase(String _username, String _password) {
@@ -72,6 +73,23 @@ public class dbase {
     }
 
     /**
+     * A method for checking error state.
+     * @return boolean True if there is any error.
+     */
+    boolean getErrorState(){
+        return error;
+    }
+
+    /**
+     * A method for checking connection state.
+     * @return boolean False if there is no connection.
+     */
+    boolean getConnectonState(){
+        return connected;
+    }
+
+    /**
+     *
      *Method to Insert Student info into "DEPT" table .
      * @param dept_name for department name
      * @param building for  building name
@@ -79,27 +97,103 @@ public class dbase {
 
     public int insertDept(String dept_name, String building)
     {
-        query = String.format("INSERT INTO DEPT ('%s' , '%s');", dept_name, building);
+        query = String.format("INSERT INTO DEPT VALUES(\'%s\' , \'%s\')", dept_name, building);
         Integer count1 = getCount();
         if (count1 != null) return count1;
         return -1;
     }
 
     /**
+     *
      *Method to Insert Student info into "STUDENT" table .
      * @param s_id for Student ID
      * @param s_name for student name
      * @param s_dept for student department
      * @param s_address for student address
      * @param s_contact for student contact
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
      */
 
     public int insertStudent(String s_id, String s_name, String s_dept, String s_address, String s_contact )
     {
-        query = String.format("INSERT INTO STUDENT VALUES (%s, '%s' , '%s' , '%s' , '%s' ;)", s_id, s_name, s_dept, s_address, s_contact);
+        query = String.format("INSERT INTO STUDENT VALUES (%s, \'%s\' , \'%s\' , \'%s\' , \'%s\')", s_id, s_name, s_dept, s_address, s_contact);
         Integer count1 = getCount();
         if (count1 != null) return count1;
         return -1;
+    }
+
+    /**
+     *
+     *Method to Insert Student info into "TEACHER" table .
+     * @param t_id for Student ID
+     * @param t_name for student name
+     * @param t_dept for student department
+     * @param t_address for student address
+     * @param t_contact for student contact
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     */
+
+    public int insertTeacher(String t_id, String t_name, String t_dept, String t_address, String t_contact )
+    {
+        query = String.format("INSERT INTO TEACHER VALUES (%s, \'%s\' , \'%s\' , \'%s\' , \'%s\')", t_id, t_name, t_dept, t_address, t_contact);
+        Integer count1 = getCount();
+        if (count1 != null) return count1;
+        return -1;
+    }
+
+    /**
+     *
+     * @param c_id for course id (e.g.: "CSE 4402")
+     * @param c_tilte for course title
+     * @param c_dept course department
+     * @param c_credit for course credit
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     */
+    public int insertCourse(String c_id, String c_tilte, String c_dept, String c_credit)
+    {
+        query = String.format("INSERT INTO COURSES VALUES (\'%s\', \'%s\', \'%s\', %s)",c_id, c_tilte, c_dept, c_credit);
+        Integer count1 = getCount();
+        if (count1 != null) return count1;
+        return -1;
+    }
+
+
+    /**
+     *
+     * @param m_sid for student id to be inserted into marks
+     * @param m_dept for student department to be inserted into marks
+     * @param m_cid for student taken course
+     * @param midexam for marks obtained in the midterm exam
+     * @param finalexam for marks obtained in the final exam.
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     */
+    public int insertMarks(String m_sid, String m_dept, String m_cid, String midexam, String finalexam)
+    {
+        query = String.format("INSERT INTO MARKS VALUES (%s, \'%s\', \'%s\', %s, %s)",m_sid, m_dept, m_cid, midexam, finalexam);
+        Integer count1 = getCount();
+        if (count1 != null) return count1;
+        return -1;
+    }
+
+    /**
+     *
+     * @param tableName insert the table name for which you want to retrieve all data
+     * @return On SUCCESS : a resultset or a full table data; On Failure : null.
+     */
+    public ResultSet ListSearchAll(String tableName)
+    {
+        query = String.format("SELECT * FROM %s", tableName);
+        if (resultSetHandler())
+            return resultSet;
+        return null;
+    }
+
+    public ResultSet ListSelectedStudentFromMarksDeatils(String s_id)
+    {
+        query = String.format("SELECT * FROM STD_MARKS_DETAILS");
+        if (resultSetHandler())
+            return resultSet;
+        return null;
     }
 
     /**
@@ -119,6 +213,57 @@ public class dbase {
         return null;
     }
 
+    /**
+     * Repetition preventing method.
+     * @param columnIndex int Index of the column of result set to derive integer value from.
+     * @return boolean Whether setting value of ResultSet rs was successful or not.
+     */
+    private boolean integerHandler(int columnIndex) {
+        try {
+            resultSet = statement.executeQuery(query);
+            while(resultSet.next())
+                retint = resultSet.getInt(columnIndex);
+            return true;
+        } catch (SQLException ex) {
+            error = true;
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Repetition preventing method.
+     * @return boolean Whether assigning resultSet was successful or not.
+     */
+    private boolean resultSetHandler() {
+        try{
+            resultSet = statement.executeQuery(query);
+            return true;
+        }
+        catch (SQLException ex){
+            error = true;
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Repetition preventing method.
+     * @return boolean Whether a certain value is present or not in a single attribute returning ResultSet.
+     */
+    private boolean boolHandler(String match){
+        try {
+            resultSet = statement.executeQuery(query);
+            if (resultSet.next()){
+                return match.equals(resultSet.getString(1));
+            }
+        } catch (SQLException ex) {
+            error = true;
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }
+
 
 
