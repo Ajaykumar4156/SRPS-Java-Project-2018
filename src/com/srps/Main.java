@@ -23,41 +23,49 @@ public class Main {
         ResultSet rs; // for showing a table
 
         try {
+
+            /* Please un-comment these lines if you want to test for the very first time*/
+            /* But please be careful about Constraints check on database (e.g.: Repetition of Primary key)*/
+
             //DataBaseConnectionCheck.insertDept("CEE", "AC1" );
-            //DataBaseConnectionCheck.insertStudent("160041014", "Gazzali", "CSE", "Dhaka", "123456");
+            //DataBaseConnectionCheck.insertStudent("160041013", "Raiyan", "CSE", "Dhaka", "987456");
             //DataBaseConnectionCheck.insertTeacher("154383", "Ahnaf Munir", "CSE", "Dhaka", "123456");
             //DataBaseConnectionCheck.insertCourse("CSE 4402", "Visual Java Lab", "CSE", "1.0");
-            //DataBaseConnectionCheck.insertMarks("160041014", "CSE", "CSE 4402", "55.02", "225.02");
+            //DataBaseConnectionCheck.insertMarks("160041013", "CSE", "CSE 4402", "50.02", "200.02");
 
-            rs = DataBaseConnectionCheck.ListSearchAll("TEACHER"); //checking teacher table result
+           /*rs = DataBaseConnectionCheck.listGetAllStudent(); //checking all student table result
             if (rs == null)
                 System.out.println("NO RESULT FOUND !");
             else {
-                System.out.println("Teacher ID\tTeacher Name\tTeacher Dept.\tTeacher Address\tTeacher Contact");
+                System.out.println("Student ID\tStudent Name\tStudent Dept.\tStudent Address\tStudent Contact\n");
                 while (rs.next()) {
 
-                    System.out.println(rs.getString(1) + "\t");
-                    System.out.println(rs.getString(2) + "\t");
-                    System.out.println(rs.getString(3) + "\t");
-                    System.out.println(rs.getString(4) + "\t");
-                    System.out.println(rs.getString(5) + "\t");
-
+                    System.out.print(rs.getString(1) + "\t");
+                    System.out.print(rs.getString(2) + "\t");
+                    System.out.print(rs.getString(3) + "\t");
+                    System.out.print(rs.getString(4) + "\t");
+                    System.out.print(rs.getString(5) + "\t\n");
                 }
             }
-            System.out.println("-------------------------------------------------");
+            System.out.println("\n-------------------------------------------------");*/
 
-            rs = DataBaseConnectionCheck.ListSelectedStudentFromMarksDeatils("160041014");
+            rs = DataBaseConnectionCheck.listSelectedStudentFromMarksDeatils("160041014");
             if (rs == null)
                 System.out.println("NO RESULT FOUND !");
             else {
-                System.out.println("Student ID\tStudent Name\tCourse ID.\tCourse Title\tMid Term\tFinal Exam");
+                System.out.println("Student ID\tStudent Name\tCourse ID.\tCourse Title\tMid Term\tFinal Exam\n");
                 while (rs.next()) {
                     for (int n = 1; n <= 6; n++) // 6 cols. in STD_MARK_DETAILS so iterating 1 to 6
-                        System.out.println(rs.getString(n) + "\t");
+                        System.out.print(rs.getString(n) + "\t");
+                    System.out.println("\n");
                 }
             }
 
-            System.out.println("-------------------------------------------------");
+            System.out.println("\n-------------------------------------------------");
+
+            //DataBaseConnectionCheck.updateMidMarks("160041014", "60.02");
+            DataBaseConnectionCheck.deleteStudent("154383");
+            System.out.println("\n-------------------------------------------------");
         }
         catch (SQLException ex){
             ex.printStackTrace(); // Exception handled and printed

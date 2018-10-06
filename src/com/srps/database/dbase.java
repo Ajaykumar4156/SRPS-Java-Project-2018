@@ -1,5 +1,6 @@
 package com.srps.database;
 
+import java.util.Scanner;
 import java.sql.*;
 
 /**
@@ -177,18 +178,81 @@ public class dbase {
 
     /**
      *
-     * @param tableName insert the table name for which you want to retrieve all data
+     * method to update mid exam marks if mid marks are changed after it's been inserted once
+     * @param s_iD student id to be updated
+     * @param midexam midexam marks to be updated
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     */
+    public int updateMidMarks(String s_iD, String midexam)
+    {
+        query = String.format("UPDATE MARKS SET MIDEXAM = %s WHERE M_SID = %s", midexam, s_iD);
+        Integer count1 = getCount();
+        if (count1 != null) return count1;
+        return -1;
+    }
+
+    /**
+     *
+     * method to update final exam marks if mid marks are changed after it's been inserted once
+     * @param s_iD student id to be updated
+     * @param finalexam finalexam marks to be updated
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     */
+    public int updateFinalMarks(String s_iD, String finalexam)
+    {
+        query = String.format("UPDATE MARKS SET FINALEXAM = %s WHERE M_SID = %s", finalexam, s_iD);
+        Integer count1 = getCount();
+        if (count1 != null) return count1;
+        return -1;
+    }
+
+    /**
+     *
+     * @param s_id student id to be deleted from STUDENT Table
+     * @return count1 , on success an integer value indicating how many rows are affected by this query .
+     * @return -2 if the user chooses to CANCEL this delete operation
+     * @return -1 if anything else happens
+     */
+
+    public int deleteStudent(String s_id)
+    {
+        char choice;
+        Scanner confirm = new Scanner(System.in);
+        System.out.printf("Do you want REALLY delete this ID %s (Y/N)?.\nThis action CAN\'T be UNDONE : ", s_id);
+        choice = confirm.next().charAt(0);
+        /*if (choice != 'Y' || choice != 'y' || choice != 'N' || choice != 'n')
+        {
+            System.out.printf("Please Enter a valid Choice.\nDelete this ID %s (Y/N) : ",s_id);
+        }*/
+        if(choice == 'Y') {
+            query = String.format("DELETE FROM STUDENT WHERE S_ID = %s", s_id);
+            Integer count1 = getCount();
+            if (count1 != null) return count1;
+            return -1;
+        }
+        else return -2;
+    }
+
+    /*--------------- Table Returning Method Starts---------------------*/
+    /**
+     *
+     * method to get full STUDENT table.
      * @return On SUCCESS : a resultset or a full table data; On Failure : null.
      */
-    public ResultSet ListSearchAll(String tableName)
+    public ResultSet listGetAllStudent()
     {
-        query = String.format("SELECT * FROM %s", tableName);
+        query = String.format("SELECT * FROM STUDENT");
         if (resultSetHandler())
             return resultSet;
         return null;
     }
 
-    public ResultSet ListSelectedStudentFromMarksDeatils(String s_id)
+    /**
+     *
+     * @param s_id student id to be searched for
+     * @return On SUCCESS : a resultset or a full table data; On Failure : null.
+     */
+    public ResultSet listSelectedStudentFromMarksDeatils(String s_id)
     {
         query = String.format("SELECT * FROM STD_MARKS_DETAILS");
         if (resultSetHandler())
@@ -196,6 +260,9 @@ public class dbase {
         return null;
     }
 
+    /*--------------- Table Returning Method Ends---------------------*/
+
+    /*---------------Repetition preventing methods Starts-------------*/
     /**
      * Repetition preventing method.
      * @return Integer nullable integer data type as count.
@@ -263,6 +330,8 @@ public class dbase {
         }
         return false;
     }
+
+    /*---------------Repetition preventing methods Starts-------------*/
 }
 
 
