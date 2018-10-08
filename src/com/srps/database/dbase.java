@@ -106,7 +106,7 @@ public class dbase {
 
     /**
      *
-     *Method to Insert Student info into "STUDENT" table .
+     * Method to Insert Student info into "STUDENT" table .
      * @param s_id for Student ID
      * @param s_name for student name
      * @param s_dept for student department
@@ -125,7 +125,7 @@ public class dbase {
 
     /**
      *
-     *Method to Insert Student info into "TEACHER" table .
+     * Method to Insert Student info into "TEACHER" table .
      * @param t_id for Student ID
      * @param t_name for student name
      * @param t_dept for student department
@@ -144,6 +144,7 @@ public class dbase {
 
     /**
      *
+     * Method to INSERT course details into COURSES table
      * @param c_id for course id (e.g.: "CSE 4402")
      * @param c_tilte for course title
      * @param c_dept course department
@@ -160,7 +161,7 @@ public class dbase {
 
 
     /**
-     *
+     * Method to INSERT marks details into MARKS table
      * @param m_sid for student id to be inserted into marks
      * @param m_dept for student department to be inserted into marks
      * @param m_cid for student taken course
@@ -208,6 +209,7 @@ public class dbase {
 
     /**
      *
+     * Method to DELETE student details from STUDENT table
      * @param s_id student id to be deleted from STUDENT Table
      * @return count1 , on success an integer value indicating how many rows are affected by this query .
      * @return -2 if the user chooses to CANCEL this delete operation
@@ -237,7 +239,7 @@ public class dbase {
     /**
      *
      * method to get full STUDENT table.
-     * @return On SUCCESS : a resultset or a full table data; On Failure : null.
+     * @return On SUCCESS : 5 columns are returned. Column1 as NUMBER (or auto-converted STRING if getString() is used), Col2 as STRING, Col3 as STRING, Col4 as STRING, Col5 as STRING; On Failure : null.
      */
     public ResultSet listGetAllStudent()
     {
@@ -249,8 +251,9 @@ public class dbase {
 
     /**
      *
+     * Method to get selected student's mark details from STD_MARKS_DETAILS view
      * @param s_id student id to be searched for
-     * @return On SUCCESS : a resultset or a full table data; On Failure : null.
+     * @return On SUCCESS :6 columns are returned. Column1 as NUMBER (or auto-converted STRING if getString() is used), Col2 as STRING, Col3 as STRING, Col4 as STRING, Col5 as NUMBERor auto-converted STRING if getString() is used, Col6 as NUMBERor auto-converted STRING if getString() is used; On Failure : null.
      */
     public ResultSet listSelectedStudentFromMarksDeatils(String s_id)
     {
